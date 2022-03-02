@@ -1,7 +1,7 @@
 {
-    "name": "ShiraoriBOT-Md",
-    "version": "0.5.1",
-    "description": "Simle Bot WhatsApp with Baileys Multi Device",
+    "name": "bot-whatsapp-sticker",
+    "version": "0.0.1",
+    "description": "Recode by Wan",
     "depecrated": false,
     "main": "index.js",
     "directories": {
@@ -15,24 +15,18 @@
         "test2": "nodemon index.js"
     },
     "keywords": [
-        "termux-whatsapp-bot",
-        "whatsapp-bot",
-        "whatsapp",
-        "js-whatsapp",
-        "whatsapp",
-        "ShiraoriBOT",
-        "wabot-aq"
+        "bot-whatsapp-sticker"
     ],
-    "homepage": "https://github.com/ilmanhdyt/ShiraoriBOT-Md",
+    "homepage": "https://github.com/Adhwa99811/bot-whatsapp-sticker",
     "author": {
-        "name": "Ilman"
+        "name": "Adhwa99811"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ilmanhdyt/ShiraoriBOT-Md.git"
+        "url": "git+https://github.com/Adhwa99811/bot-whatsapp-sticker.git"
     },
     "bugs": {
-        "url": "https://github.com/ilmanhdyt/ShiraoriBOT-Md/issues"
+        "url": "https://github.com/Adhwa99811/bot-whatsapp-sticker/issues"
     },
     "license": "GPL-3.0-or-later",
     "dependencies": {

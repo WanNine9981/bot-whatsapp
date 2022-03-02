@@ -1,4 +1,4 @@
-console.log('Starting...')
+console.log('Menghidupkan...')
 let cluster = require('cluster')
 let path = require('path')
 let fs = require('fs')
@@ -7,23 +7,17 @@ const CFonts = require('cfonts')
 const Readline = require('readline')
 const yargs = require('yargs/yargs')
 const rl = Readline.createInterface(process.stdin, process.stdout)
-
-CFonts.say('ShiraoriBOT\nMulti-device ', {
+CFonts.say('Bot WhatsApp Sticker', {
   font: 'chrome',
   align: 'center',
   gradient: ['red', 'magenta']
 })
-CFonts.say(`'${package.name}' By @${package.author.name || package.author}`, {
+CFonts.say('Recode by Wan', {
   font: 'console',
   align: 'center',
   gradient: ['red', 'magenta']
 })
-
 var isRunning = false
-/**
- * Start a js file
- * @param {String} file `path/to/file`
- */
 function start(file) {
   if (isRunning) return
   isRunning = true
@@ -39,7 +33,7 @@ function start(file) {
   })
   let p = cluster.fork()
   p.on('message', data => {
-    console.log('[RECEIVED]', data)
+    console.log('Menerima:', data)
     switch (data) {
       case 'reset':
         p.kill()
@@ -53,7 +47,7 @@ function start(file) {
   })
   p.on('exit', code => {
     isRunning = false
-    console.error('Exited with code:', code)
+    console.error('Ralat kod:', code)
     if (code === 0) return
     fs.watchFile(args[0], () => {
       fs.unwatchFile(args[0])
@@ -65,7 +59,5 @@ function start(file) {
     if (!rl.listenerCount()) rl.on('line', line => {
       p.emit('message', line.trim())
     })
-  // console.log(p)
 }
-
 start('main.js')

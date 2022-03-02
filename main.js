@@ -21,27 +21,20 @@ try {
 }
 const { Low, JSONFile } = low
 const mongoDB = require('./lib/mongoDB')
-
-
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
-// global.Fn = function functionCallBack(fn, ...args) { return fn.call(global.conn, ...args) }
 global.timestamp = {
   start: new Date
 }
-
 const PORT = process.env.PORT || 3000
-
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
-// console.log({ opts })
-global.prefix = new RegExp('^[' + (opts['prefix'] || '‎xzXZ/i!#$%+£¢€¥^°=¶∆×÷π√✓©®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
-
+global.prefix = new RegExp('^[' + (opts['prefix'] || '!#$%.') + ']')
 global.db = new Low(
   /https?:\/\//.test(opts['db'] || '') ?
     new cloudDBAdapter(opts['db']) : /mongodb/.test(opts['db']) ?
       new mongoDB(opts['db']) :
       new JSONFile(`${opts._[0] ? opts._[0] + '_' : ''}database.json`)
 )
-global.DATABASE = global.db // Backwards Compatibility
+global.DATABASE = global.db
 global.loadDatabase = async function loadDatabase() {
   if (global.db.READ) return new Promise((resolve) => setInterval(function () { (!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null) }, 1 * 1000))
   if (global.db.data !== null) return
@@ -59,29 +52,21 @@ global.loadDatabase = async function loadDatabase() {
   global.db.chain = _.chain(global.db.data)
 }
 loadDatabase()
-
-// if (opts['cluster']) {
-//   require('./lib/cluster').Cluster()
-// }
 global.authFile = `${opts._[0] || 'session'}.data.json`
 global.isInit = !fs.existsSync(authFile)
 const { state, saveState } = useSingleFileAuthState(global.authFile)
-
 const connectionOptions = {
   printQRInTerminal: true,
   auth: state,
   logger: P({ level: 'debug' })
 }
-
 global.conn = simple.makeWASocket(connectionOptions)
-
 if (!opts['test']) {
   if (global.db) setInterval(async () => {
     if (global.db.data) await global.db.write()
     if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp'], tmp.forEach(filename => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])))
   }, 30 * 1000)
 }
-
 async function connectionUpdate(update) {
   const { connection, lastDisconnect } = update
   global.timestamp.connect = new Date
@@ -91,11 +76,7 @@ async function connectionUpdate(update) {
   if (global.db.data == null) await loadDatabase()
   console.log(JSON.stringify(update, null, 4))
 }
-
-
 process.on('uncaughtException', console.error)
-// let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
-
 const imports = (path) => {
   path = require.resolve(path)
   let modules, retry = 0
@@ -122,17 +103,15 @@ global.reloadHandler = function (restatConn) {
     conn.ev.off('connection.update', conn.connectionUpdate)
     conn.ev.off('creds.update', conn.credsUpdate)
   }
-
-  conn.welcome = 'Hai, @user!\nSelamat datang di grup @subject\n\n@desc'
-  conn.bye = 'Selamat tinggal @user!'
-  conn.spromote = '@user sekarang admin!'
-  conn.sdemote = '@user sekarang bukan admin!'
+  conn.welcome = ''
+  conn.bye = ''
+  conn.spromote = ''
+  conn.sdemote = ''
   conn.handler = handler.handler.bind(conn)
   conn.participantsUpdate = handler.participantsUpdate.bind(conn)
   conn.onDelete = handler.delete.bind(conn)
   conn.connectionUpdate = connectionUpdate.bind(conn)
   conn.credsUpdate = saveState.bind(conn)
-
   conn.ev.on('messages.upsert', conn.handler)
   conn.ev.on('group-participants.update', conn.participantsUpdate)
   conn.ev.on('message.delete', conn.onDelete)
@@ -141,7 +120,6 @@ global.reloadHandler = function (restatConn) {
   isInit = false
   return true
 }
-
 let pluginFolder = path.join(__dirname, 'plugins')
 let pluginFilter = filename => /\.js$/.test(filename)
 global.plugins = {}
@@ -179,8 +157,6 @@ global.reload = (_ev, filename) => {
 Object.freeze(global.reload)
 fs.watch(path.join(__dirname, 'plugins'), global.reload)
 global.reloadHandler()
-
-// Quick Test
 async function _quickTest() {
   let test = await Promise.all([
     cp.spawn('ffmpeg'),
@@ -213,14 +189,11 @@ async function _quickTest() {
     gm,
     find
   }
-  // require('./lib/sticker').support = s
   Object.freeze(global.support)
-
-  if (!s.ffmpeg) conn.logger.warn('Please install ffmpeg for sending videos (pkg install ffmpeg)')
-  if (s.ffmpeg && !s.ffmpegWebp) conn.logger.warn('Stickers may not animated without libwebp on ffmpeg (--enable-ibwebp while compiling ffmpeg)')
-  if (!s.convert && !s.magick && !s.gm) conn.logger.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
+  if (!s.ffmpeg) conn.logger.warn('Sila pasang ffmpeg untuk menghantar video (apt install ffmpeg)')
+  if (s.ffmpeg && !s.ffmpegWebp) conn.logger.warn('Pelekat tidak boleh dianimasikan tanpa libwebp pada ffmpeg (--enable-ibwebp while compiling ffmpeg)')
+  if (!s.convert && !s.magick && !s.gm) conn.logger.warn('Pelekat mungkin tidak berfungsi tanpa imagemagick jika libwebp pada ffmpeg tidak dipasang (apt install imagemagick)')
 }
-
 _quickTest()
-  .then(() => conn.logger.info('Quick Test Done'))
+  .then(() => conn.logger.info('Ujian pantas selesai'))
   .catch(console.error)

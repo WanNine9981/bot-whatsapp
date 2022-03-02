@@ -1,10 +1,8 @@
 let fs = require('fs')
-
-global.owner = ['6281351047727'] // Put your number here
-global.mods = [] // Want some help?
+global.owner = ['60164492583']
+global.mods = ['60164492583']
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json'))
-global.APIs = { // API Prefix
-  // name: 'https://website'
+global.APIs = {
   nrtm: 'https://nurutomo.herokuapp.com',
   bg: 'http://bochil.ddns.net',
   xteam: 'https://api.xteam.xyz',
@@ -15,8 +13,7 @@ global.APIs = { // API Prefix
   pencarikode: 'https://pencarikode.xyz',
   LeysCoder: 'https://leyscoders-api.herokuapp.com'
 }
-global.APIKeys = { // APIKey Here
-  // 'https://website': 'apikey'
+global.APIKeys = {
   'https://api.xteam.xyz': 'apivproject',
   'https://melcanz.com': 'elaina',
   'https://api.lolhuman.xyz': 'pkebgk8248jskrkfm',
@@ -25,54 +22,47 @@ global.APIKeys = { // APIKey Here
   'https://pencarikode.xyz': 'pais',
   'https://leyscoders-api.herokuapp.com': 'dappakntlll'
 }
-
-// Sticker WM
-global.stiker_wait = 'Stiker sedang dibuat'
-global.packname = 'ShiraoriBOT Multi device'
-global.author = 'Ilman'
-global.email = 'wakabahiiro5@gmail.com'
-global.fla = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=runner-logo&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&text='
-global.wm = '© ShiraoriBOT-Md Made by Ilman'
-global.media = 'https://telegra.ph/file/5d45a3d1e12726d98c5e4.jpg'
-
-global.wait = '_*tunggu sedang di proses...*_'
-global.eror = '_*Server Error*_'
-
-global.multiplier = 69 // The higher, The harder levelup
-
+global.stiker_wait = 'Stiker sedang dibuat...'
+global.packname = 'Bot WhatsApp'
+global.author = 'Sticker'
+global.email = ''
+global.fla = ''
+global.wm = ''
+global.media = ''
+global.wait = ''
+global.eror = ''
+global.multiplier = 69
 global.rpg = {
   emoticon(string) {
     string = string.toLowerCase()
     let emot = {
-      exp: '✉️',
-      money: '💵',
-      potion: '🥤',
-      diamond: '💎',
-      common: '📦',
-      uncommon: '🎁',
-      mythic: '🗳️',
-      legendary: '🗃️',
-      pet: '🎁',
-      sampah: '🗑',
-      armor: '🥼',
-      sword: '⚔️',
-      kayu: '🪵',
-      batu: '🪨',
-      string: '🕸️',
-      kuda: '🐎',
-      kucing: '🐈' ,
-      anjing: '🐕',
-      petFood: '🍖',
-      gold: '👑',
-      emerald: '💚'
+      exp: '',
+      money: '',
+      potion: '',
+      diamond: '',
+      common: '',
+      uncommon: '',
+      mythic: '',
+      legendary: '',
+      pet: '',
+      sampah: '',
+      armor: '',
+      sword: '',
+      kayu: '',
+      batu: '',
+      string: '',
+      kuda: '',
+      kucing: '',
+      anjing: '',
+      petFood: '',
+      gold: '',
+      emerald: ''
     }
     let results = Object.keys(emot).map(v => [v, new RegExp(v, 'gi')]).filter(v => v[1].test(string))
     if (!results.length) return ''
     else return emot[results[0][0]]
   }
 }
-
-
 let chalk = require('chalk')
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
