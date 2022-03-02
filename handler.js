@@ -1,16 +1,12 @@
 const simple = require('./lib/simple')
 const util = require('util')
-
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
-
 module.exports = {
     async handler(chatUpdate) {
         if (global.db.data == null) await loadDatabase()
         this.msgqueque = this.msgqueque || []
-        // console.log(chatUpdate)
         if (!chatUpdate) return
-        // if (chatUpdate.messages.length > 2 || !chatUpdate.messages.length) return
         if (chatUpdate.messages.length > 1) console.log(chatUpdate.messages)
         let m = chatUpdate.messages[chatUpdate.messages.length - 1]
         if (!m) return
@@ -18,7 +14,6 @@ module.exports = {
         try {
             m = simple.smsg(this, m) || m
             if (!m) return
-            // console.log(m)
             m.exp = 0
             m.limit = false
             try {
@@ -41,7 +36,6 @@ module.exports = {
                     if (!isNumber(user.level)) user.level = 0
                     if (!user.role) user.role = 'Beginner'
                     if (!('autolevelup' in user)) user.autolevelup = true
-
                     if (!isNumber(user.money)) user.money = 0
                     if (!isNumber(user.healt)) user.healt = 100
                     if (!isNumber(user.limit)) user.limit = 0
@@ -52,18 +46,15 @@ module.exports = {
                     if (!isNumber(user.string)) user.string = 0
                     if (!isNumber(user.petFood)) user.petFood = 0
                     if (!isNumber(user.makananpet)) user.makananpet = 0
-
                     if (!isNumber(user.emerald)) user.emerald = 0
                     if (!isNumber(user.diamond)) user.diamond = 0
                     if (!isNumber(user.gold)) user.gold = 0
                     if (!isNumber(user.iron)) user.iron = 0
-
                     if (!isNumber(user.common)) user.common = 0
                     if (!isNumber(user.uncommon)) user.uncommon = 0
                     if (!isNumber(user.mythic)) user.mythic = 0
                     if (!isNumber(user.legendary)) user.legendary = 0
                     if (!isNumber(user.pet)) user.pet = 0
-
                     if (!isNumber(user.kuda)) user.kuda = 0
                     if (!isNumber(user.kudaexp)) user.kudaexp = 0
                     if (!isNumber(user.kucing)) user.kucing = 0
@@ -72,12 +63,10 @@ module.exports = {
                     if (!isNumber(user.rubahexp)) user.rubahexp = 0
                     if (!isNumber(user.anjing)) user.anjing = 0
                     if (!isNumber(user.anjingexp)) user.anjingexp = 0
-
                     if (!isNumber(user.kudalastfeed)) user.kudalastfeed = 0
                     if (!isNumber(user.kucinglastfeed)) user.kucinglastfeed = 0
                     if (!isNumber(user.rubahlastfeed)) user.rubahlastfeed = 0
                     if (!isNumber(user.anjinglastfeed)) user.anjinglastfeed = 0
-
                     if (!isNumber(user.armor)) user.armor = 0
                     if (!isNumber(user.armordurability)) user.armordurability = 0
                     if (!isNumber(user.sword)) user.sword = 0
@@ -86,7 +75,6 @@ module.exports = {
                     if (!isNumber(user.pickaxedurability)) user.pickaxedurability = 0
                     if (!isNumber(user.fishingrod)) user.fishingrod = 0
                     if (!isNumber(user.fishingroddurability)) user.fishingroddurability = 0
-
                     if (!isNumber(user.lastclaim)) user.lastclaim = 0
                     if (!isNumber(user.lastadventure)) user.lastadventure = 0
                     if (!isNumber(user.lastfishing)) user.lastfishing = 0
@@ -96,11 +84,10 @@ module.exports = {
                     if (!isNumber(user.lasthunt)) user.lasthunt = 0
                     if (!isNumber(user.lastweekly)) user.lastweekly = 0
                     if (!isNumber(user.lastmonthly)) user.lastmonthly = 0
-                    
                     if (!isNumber(user.warning)) user.warning = 0
                 } else global.db.data.users[m.sender] = {
                     exp: 0,
-                    limit: 10,
+                    limit: 0,
                     lastclaim: 0,
                     registered: false,
                     name: m.name,
@@ -112,28 +99,24 @@ module.exports = {
                     warn: 0,
                     level: 0,
                     role: 'Beginner',
-                    autolevelup: true,
-
+                    autolevelup: false,
                     money: 0,
-                    healt: 100,
-                    limit: 100,
-                    potion: 10,
+                    healt: 0,
+                    limit: 0,
+                    potion: 0,
                     sampah: 0,
                     kayu: 0,
                     batu: 0,
                     string: 0,
-
                     emerald: 0,
                     diamond: 0,
                     gold: 0,
                     iron: 0,
-
                     common: 0,
                     uncommon: 0,
                     mythic: 0,
                     legendary: 0,
                     pet: 0,
-
                     kuda: 0,
                     kudaexp: 0,
                     kucing: 0,
@@ -142,12 +125,10 @@ module.exports = {
                     rubahexp: 0,
                     anjing: 0,
                     anjingexp: 0,
-
                     kudalastfeed: 0,
                     kucinglastfeed: 0,
                     rubahlastfeed: 0,
                     anjinglastfeed: 0,
-
                     armor: 0,
                     armordurability: 0,
                     sword: 0,
@@ -156,7 +137,6 @@ module.exports = {
                     pickaxedurability: 0,
                     fishingrod: 0,
                     fishingroddurability: 0,
-
                     lastclaim: 0,
                     lastadventure: 0,
                     lastfishing: 0,
@@ -195,34 +175,33 @@ module.exports = {
                     antiLink: false,
                     simi: false,
                     viewonce: false,
-                    antiToxic: true,
+                    antiToxic: false,
                 }
-                
-        let settings = global.db.data.settings
-        if (typeof settings !== 'object') global.db.data.settings = {}
-        if (settings) {
-          if (!'anon' in settings) settings.anon = true
-          if (!'anticall' in settings) settings.anticall = true
-          if (!'antispam' in settings) settings.antispam = true
-          if (!'antitroli' in settings) settings.antitroli = true
-          if (!'backup' in settings) settings.backup = false
-          if (!isNumber(settings.backupDB)) settings.backupDB = 0
-          if (!'groupOnly' in settings) settings.groupOnly = false
-          if (!'jadibot' in settings) settings.groupOnly = false
-          if (!'nsfw' in settings) settings.nsfw = true
-          if (!isNumber(settings.status)) settings.status = 0
-        } else global.db.data.settings = {
-          anon: true,
-          anticall: true,
-          antispam: true,
-          antitroli: true,
-          backup: false,
-          backupDB: 0,
-          groupOnly: false,
-          jadibot: false,
-          nsfw: false,
-          status: 0,
-        }                
+                let settings = global.db.data.settings
+                if (typeof settings !== 'object') global.db.data.settings = {}
+                if (settings) {
+                    if (!'anon' in settings) settings.anon = true
+                    if (!'anticall' in settings) settings.anticall = true
+                    if (!'antispam' in settings) settings.antispam = true
+                    if (!'antitroli' in settings) settings.antitroli = true
+                    if (!'backup' in settings) settings.backup = false
+                    if (!isNumber(settings.backupDB)) settings.backupDB = 0
+                    if (!'groupOnly' in settings) settings.groupOnly = false
+                    if (!'jadibot' in settings) settings.groupOnly = false
+                    if (!'nsfw' in settings) settings.nsfw = true
+                    if (!isNumber(settings.status)) settings.status = 0
+                } else global.db.data.settings = {
+                    anon: true,
+                    anticall: false,
+                    antispam: false,
+                    antitroli: false,
+                    backup: false,
+                    backupDB: 0,
+                    groupOnly: false,
+                    jadibot: false,
+                    nsfw: false,
+                    status: 0,
+                }
             } catch (e) {
                 console.error(e)
             }
@@ -251,40 +230,37 @@ module.exports = {
             }
             if (m.isBaileys) return
             m.exp += Math.ceil(Math.random() * 10)
-
             let usedPrefix
             let _user = global.db.data && global.db.data.users && global.db.data.users[m.sender]
-
             let isROwner = [global.conn.user.jid, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
             let isOwner = isROwner || m.fromMe
             let isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
             let isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
             let groupMetadata = (m.isGroup ? (conn.chats[m.chat] || {}).metadata : {}) || {}
             let participants = (m.isGroup ? groupMetadata.participants : []) || []
-            let user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {} // User Data
-            let bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {} // Your Data
-            let isAdmin = user && user.admin || false // Is User Admin?
-            let isBotAdmin = bot && bot.admin || false // Are you Admin?
+            let user = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) === m.sender) : {}) || {}
+            let bot = (m.isGroup ? participants.find(u => conn.decodeJid(u.id) == this.user.jid) : {}) || {}
+            let isAdmin = user && user.admin || false
+            let isBotAdmin = bot && bot.admin || false
             for (let name in global.plugins) {
                 let plugin = global.plugins[name]
                 if (!plugin) continue
                 if (plugin.disabled) continue
                 if (!opts['restrict']) if (plugin.tags && plugin.tags.includes('admin')) {
-                    // global.dfail('restrict', m, this)
                     continue
                 }
                 const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
                 let _prefix = plugin.customPrefix ? plugin.customPrefix : conn.prefix ? conn.prefix : global.prefix
-                let match = (_prefix instanceof RegExp ? // RegExp Mode?
+                let match = (_prefix instanceof RegExp ?
                     [[_prefix.exec(m.text), _prefix]] :
-                    Array.isArray(_prefix) ? // Array?
+                    Array.isArray(_prefix) ?
                         _prefix.map(p => {
-                            let re = p instanceof RegExp ? // RegExp in Array?
+                            let re = p instanceof RegExp ?
                                 p :
                                 new RegExp(str2Regex(p))
                             return [re.exec(m.text), re]
                         }) :
-                        typeof _prefix === 'string' ? // String?
+                        typeof _prefix === 'string' ?
                             [[new RegExp(str2Regex(_prefix)).exec(m.text), new RegExp(str2Regex(_prefix))]] :
                             [[[], new RegExp]]
                 ).find(p => p[1])
@@ -310,75 +286,74 @@ module.exports = {
                     let _args = noPrefix.trim().split` `.slice(1)
                     let text = _args.join` `
                     command = (command || '').toLowerCase()
-                    let fail = plugin.fail || global.dfail // When failed
-                    let isAccept = plugin.command instanceof RegExp ? // RegExp Mode?
+                    let fail = plugin.fail || global.dfail
+                    let isAccept = plugin.command instanceof RegExp ?
                         plugin.command.test(command) :
-                        Array.isArray(plugin.command) ? // Array?
-                            plugin.command.some(cmd => cmd instanceof RegExp ? // RegExp in Array?
+                        Array.isArray(plugin.command) ?
+                            plugin.command.some(cmd => cmd instanceof RegExp ?
                                 cmd.test(command) :
                                 cmd === command
                             ) :
-                            typeof plugin.command === 'string' ? // String?
+                            typeof plugin.command === 'string' ?
                                 plugin.command === command :
                                 false
-
                     if (!isAccept) continue
                     m.plugin = name
                     if (m.chat in global.db.data.chats || m.sender in global.db.data.users) {
                         let chat = global.db.data.chats[m.chat]
                         let user = global.db.data.users[m.sender]
-                        if (name != 'unbanchat.js' && chat && chat.isBanned) return // Except this
+                        if (name != 'unbanchat.js' && chat && chat.isBanned) return
                         if (name != 'unbanuser.js' && user && user.banned) return
                     }
-                    if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) { // Both Owner
+                    if (plugin.rowner && plugin.owner && !(isROwner || isOwner)) {
                         fail('owner', m, this)
                         continue
                     }
-                    if (plugin.rowner && !isROwner) { // Real Owner
+                    if (plugin.rowner && !isROwner) {
                         fail('rowner', m, this)
                         continue
                     }
-                    if (plugin.owner && !isOwner) { // Number Owner
+                    if (plugin.owner && !isOwner) {
                         fail('owner', m, this)
                         continue
                     }
-                    if (plugin.mods && !isMods) { // Moderator
+                    if (plugin.mods && !isMods) {
                         fail('mods', m, this)
                         continue
                     }
-                    if (plugin.premium && !isPrems) { // Premium
+                    if (plugin.premium && !isPrems) {
                         fail('premium', m, this)
                         continue
                     }
-                    if (plugin.group && !m.isGroup) { // Group Only
+                    if (plugin.group && !m.isGroup) {
                         fail('group', m, this)
                         continue
-                    } else if (plugin.botAdmin && !isBotAdmin) { // You Admin
+                    } else if (plugin.botAdmin && !isBotAdmin) {
                         fail('botAdmin', m, this)
                         continue
-                    } else if (plugin.admin && !isAdmin) { // User Admin
+                    } else if (plugin.admin && !isAdmin) {
                         fail('admin', m, this)
                         continue
                     }
-                    if (plugin.private && m.isGroup) { // Private Chat Only
+                    if (plugin.private && m.isGroup) {
                         fail('private', m, this)
                         continue
                     }
-                    if (plugin.register == true && _user.registered == false) { // Butuh daftar?
+                    if (plugin.register == true && _user.registered == false) {
                         fail('unreg', m, this)
                         continue
                     }
                     m.isCommand = true
-                    let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17 // XP Earning per command
-                    if (xp > 200) m.reply('Ngecit -_-') // Hehehe
+                    let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17
+                    if (xp > 200) m.reply('')
                     else m.exp += xp
                     if (!isPrems && plugin.limit && global.db.data.users[m.sender].limit < plugin.limit * 1) {
-                        this.reply(m.chat, `Limit anda habis, silahkan beli melalui *${usedPrefix}buy*`, m)
-                        continue // Limit habis
+                        this.reply(m.chat, ``, m)
+                        continue
                     }
                     if (plugin.level > _user.level) {
-                        this.reply(m.chat, `diperlukan level ${plugin.level} untuk menggunakan perintah ini. Level kamu ${_user.level}`, m)
-                        continue // If the level has not been reached
+                        this.reply(m.chat, ``, m)
+                        continue
                     }
                     let extra = {
                         match,
@@ -404,7 +379,6 @@ module.exports = {
                         await plugin.call(this, m, extra)
                         if (!isPrems) m.limit = m.limit || plugin.limit || false
                     } catch (e) {
-                        // Error occured
                         m.error = e
                         console.error(e)
                         if (e) {
@@ -414,7 +388,6 @@ module.exports = {
                             m.reply(text)
                         }
                     } finally {
-                        // m.reply(util.format(_user))
                         if (typeof plugin.after === 'function') {
                             try {
                                 await plugin.after.call(this, m, extra)
@@ -422,7 +395,7 @@ module.exports = {
                                 console.error(e)
                             }
                         }
-                        if (m.limit) m.reply(+ m.limit + ' Limit terpakai')
+                        if (m.limit) m.reply(+ m.limit + '')
                     }
                     break
                 }
@@ -430,14 +403,12 @@ module.exports = {
         } catch (e) {
             console.error(e)
         } finally {
-            //console.log(global.db.data.users[m.sender])
             let user, stats = global.db.data.stats
             if (m) {
                 if (m.sender && (user = global.db.data.users[m.sender])) {
                     user.exp += m.exp
                     user.limit -= m.limit * 1
                 }
-
                 let stat
                 if (m.plugin) {
                     let now = + new Date
@@ -461,12 +432,6 @@ module.exports = {
                     }
                 }
             }
-
-            // try {
-            //     require('./lib/print')(m, this)
-            // } catch (e) {
-            //     console.log(m, m.quoted, e)
-            // }
             if (opts['autoread']) await this.chatRead(m.chat, m.isGroup ? m.sender : undefined, m.id || m.key.id).catch(() => { })
             let quequeIndex = this.msgqueque.indexOf(m.id || m.key.id)
             if (opts['queque'] && m.text && quequeIndex !== -1) this.msgqueque.splice(quequeIndex, 1)
@@ -474,7 +439,6 @@ module.exports = {
     },
     async participantsUpdate({ id, participants, action }) {
         if (opts['self']) return
-        // if (id in conn.chats) return // First login will spam
         if (global.isInit) return
         let chat = global.db.data.chats[id] || {}
         let text = ''
@@ -520,33 +484,27 @@ module.exports = {
         let msg = JSON.parse(chats[1].messages[id])
         let chat = global.db.data.chats[msg.key.remoteJid] || {}
         if (chat.delete) return
-        await this.reply(msg.key.remoteJid, `
-Terdeteksi @${participant.split`@`[0]} telah menghapus pesan
-Untuk mematikan fitur ini, ketik
-*.enable delete*
-`.trim(), msg, {
+        await this.reply(msg.key.remoteJid, ''.trim(), msg, {
             mentions: [participant]
         })
         this.copyNForward(msg.key.remoteJid, msg).catch(e => console.log(e, msg))
     }
 }
-
 global.dfail = (type, m, conn) => {
     let msg = {
-        rowner: 'Perintah ini hanya dapat digunakan oleh _*OWWNER!1!1!*_',
-        owner: 'Perintah ini hanya dapat digunakan oleh _*Owner Bot*_!',
-        mods: 'Perintah ini hanya dapat digunakan oleh _*Moderator*_ !',
-        premium: 'Perintah ini hanya untuk member _*Premium*_ !',
-        group: 'Perintah ini hanya dapat digunakan di grup!',
-        private: 'Perintah ini hanya dapat digunakan di Chat Pribadi!',
-        admin: 'Perintah ini hanya untuk *Admin* grup!',
-        botAdmin: 'Jadikan bot sebagai *Admin* untuk menggunakan perintah ini!',
-        unreg: 'Silahkan daftar untuk menggunakan fitur ini dengan cara mengetik:\n\n*#daftar nama.umur*\n\nContoh: *#daftar Manusia.16*',
-        restrict: 'Fitur ini di *disable*!'
+        rowner: '',
+        owner: '',
+        mods: '',
+        premium: '',
+        group: '',
+        private: '',
+        admin: '',
+        botAdmin: '',
+        unreg: '',
+        restrict: ''
     }[type]
     if (msg) return m.reply(msg)
 }
-
 let fs = require('fs')
 let chalk = require('chalk')
 let file = require.resolve(__filename)
