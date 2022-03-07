@@ -22,7 +22,7 @@ global.APIKeys = {
   'https://pencarikode.xyz': 'pais',
   'https://leyscoders-api.herokuapp.com': 'dappakntlll'
 }
-global.stiker_wait = 'Stiker sedang dibuat...'
+global.stiker_wait = 'Sticker sedang dibuat...'
 global.packname = 'Bot WhatsApp'
 global.author = 'Sticker'
 global.email = ''
